@@ -1,14 +1,12 @@
 
 package gal.uvigo.esei.aed1.chupatedos.iu;
 
-import gal.uvigo.esei.aed1.chupatedos.core.Game;
+import gal.uvigo.esei.aed1.chupatedos.core.DeckOfCards;
 
 
 public class Main {
 
   public static void main(String[] args) {
-    IU iu = new IU();
-    Game chupateDos = new Game(iu);
-    chupateDos.play();
+    DeckOfCards cs = new DeckOfCards();
   }
 }
