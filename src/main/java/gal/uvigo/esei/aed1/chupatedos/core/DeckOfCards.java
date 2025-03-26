@@ -1,20 +1,29 @@
 package gal.uvigo.esei.aed1.chupatedos.core;
 
-
+import java.util.Collections;
+import java.util.Stack;
 
 public class DeckOfCards {
 
+    private final Stack<Card> deck;
+
     public DeckOfCards() {
-        CardStack stack = new CardStack();
-        for (Card card : Card.values()){
-            stack.push(card);
-        }
-        
-        System.out.println(stack);
-        
+        deck = new Stack<>();
     }
-    
 
+    public void initializeDeck() {
+        for (Card card : Card.values()) {
+            deck.push(card);
+        }
 
+        Collections.shuffle(deck);
+    }
 
+    public Card dealCard() {
+        return deck.pop();
+    }
+
+    public int size() {
+        return deck.size();
+    }
 }
