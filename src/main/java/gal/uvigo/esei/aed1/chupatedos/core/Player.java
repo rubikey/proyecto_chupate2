@@ -1,18 +1,20 @@
 package gal.uvigo.esei.aed1.chupatedos.core;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 
 public class Player {
 
     private String name;
-    private List<Card> hand; // Lista de cartas
+    private List<Card> hand; // Lista de cartas (mano)
 
     // Método constructor
     
     public Player(String name) {
         this.name = name;
-        this.hand = new LinkedList<>();
+        this.hand = new ArrayList<>();
     }
 
     // Getter para obtener el nombre del jugador al mostrar el estado de la mesa
@@ -20,6 +22,7 @@ public class Player {
         return name;
     }
 
+    
     public void setName(String name) {
         this.name = name;
     }
@@ -30,12 +33,10 @@ public class Player {
     // Método para añadir carta a la mano del jugador
     public void addCard (Card card){
         
-        hand.addLast(card);
+        hand.add(card);
     }
     
-    /*public void playCard(Card card) {
-        hand.removeValue(card);
-    }*/
+    
     
     
     // Método para obtener las cartas que le han tocado al jugador cuando...
@@ -46,9 +47,17 @@ public class Player {
     }
     
     
+    public void printHand(){
+        System.out.println("Cartas de " + name + ":");
+        for (Card card: hand){
+            System.out.println(card.toString() + " ");
+        }
+    
+    }
+    
      
     
     
-    // crear toString del nombre del jugador y la mano que le ha tocado*
+    
     
 }

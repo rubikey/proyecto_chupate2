@@ -9,6 +9,6 @@ public class Main {
   public static void main(String[] args) {
     IU iu = new IU();
     Game chupateDos = new Game(iu);
-    chupateDos.play();
+    chupateDos.start();
   }
 }

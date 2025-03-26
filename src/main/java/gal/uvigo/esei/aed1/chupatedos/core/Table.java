@@ -1,5 +1,8 @@
 package gal.uvigo.esei.aed1.chupatedos.core;
 
+import java.util.EmptyStackException;
+import java.util.Stack;
+
 
 
 
@@ -12,7 +15,7 @@ public class Table {
     
     // Constructor de stack cartas boca arriba vacío
     public Table(){
-        faceupCards = new LinkedStack<>();
+        faceupCards = new Stack<>();
         
     }
 
@@ -22,9 +25,9 @@ public class Table {
     }
     
     // Hace visible la carta que está en la cima de la pila
-    public Card getTopCard() throws EmptyException{
+    public Card getTopCard() throws EmptyStackException{
         
-        return faceupCards.top();
+        return faceupCards.peek();
     }
     
     
