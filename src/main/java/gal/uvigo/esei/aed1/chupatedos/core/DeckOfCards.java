@@ -18,12 +18,4 @@ public class DeckOfCards {
 
         Collections.shuffle(deck);
     }
-
-    public Card dealCard() {
-        return deck.pop();
-    }
-
-    public int size() {
-        return deck.size();
-    }
 }
