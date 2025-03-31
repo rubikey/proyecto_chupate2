@@ -14,7 +14,7 @@ public class Game {
     private final List<Player> players;
     // Lista de jugadores
 
-    // Constructor para inizializar los atributos
+    // Constructor para inicializar los atributos
     public Game(IU iu) {
         this.iu = iu; // Se asigna la interfaz de usuario pasada como parámetro
         this.deck = new DeckOfCards(); // Se crea una nueva baraja
@@ -38,7 +38,7 @@ public class Game {
         } while (numOfPlayers < 2 || numOfPlayers > 5);
 
         
-        // Creamos tantos jugadores como se haya indicado y los agregamos a la lista
+        // Creamos los jugadores y los agregamos a la lista
         for (int i = 1; i <= numOfPlayers; i++) {
             Player player = new Player(iu.readString("Nombre del jugador " + i + ": "));
 
@@ -61,12 +61,13 @@ public class Game {
 
         }
 
+        // Se coloca una carta en la mesa
         table.placeCard(deck.deal());
-
+        // Se muestra la carta
         System.out.println("Carta en la mesa: " + table.getTopCard().toString());
-
+        // Cartas que quedan en la baraja
         System.out.println("Cartas restantes: " + deck.getRemainingCards());
-
+        // Mostrar la mano de cada jugador
         for (Player p : players) {
             p.printHand();
 
