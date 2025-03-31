@@ -25,7 +25,7 @@ public class DeckOfCards {
         Collections.shuffle(deck);
     }
 
-    // Coger la siguiente carta (top) de la baraja (deck) usando pop
+    // Coger la siguiente carta (top) de la baraja usando pop. Elimina la carta de la baraja al repartir.
     public Card deal() {
         try {
             if (!deck.isEmpty()) {
