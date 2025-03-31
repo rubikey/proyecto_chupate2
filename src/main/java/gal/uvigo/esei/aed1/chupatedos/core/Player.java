@@ -20,14 +20,8 @@ public class Player {
         return name;
     }
 
-    // Setter por si se quiere modificar el nombre del jugador
-    public void setName(String name) {
-        this.name = name;
-    }
-
     // Método para añadir carta a la mano del jugador
     public void addCard(Card card) {
-
         hand.add(card);
     }
 
