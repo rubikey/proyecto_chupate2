@@ -5,8 +5,8 @@ import java.util.List;
 
 public class Player {
 
-    private String name;
-    private List<Card> hand;
+    private final String name;
+    private final List<Card> hand;
     // Lista de cartas (mano/hand)
 
     // Método constructor

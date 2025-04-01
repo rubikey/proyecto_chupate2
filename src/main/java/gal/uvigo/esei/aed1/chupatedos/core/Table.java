@@ -7,13 +7,11 @@ import java.util.Stack;
 public class Table {
 
     // Stack para cartas boca arriba
-    private Stack<Card> faceupCards;
-    
+    private final Stack<Card> faceupCards;
     
     // Constructor del stack de cartas vacío;
     public Table(){
-        faceupCards = new Stack<>();
-        
+        faceupCards = new Stack<>();    
     }
 
     // Colocar una carta en la pila (método push)
@@ -22,16 +20,13 @@ public class Table {
     }
     
     // Hace visible la carta que está en la cima de la pila (método peek)
-    public Card getTopCard() throws EmptyStackException{
-        
+    public Card getTopCard() throws EmptyStackException{   
         return faceupCards.peek();
     }
     
-    
     // Número de cartas que hay boca arriba
     public int getFaceupCounter(){
-        return faceupCards.size();
-        
+        return faceupCards.size(); 
     }
     
     

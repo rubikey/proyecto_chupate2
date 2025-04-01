@@ -34,7 +34,7 @@ public class DeckOfCards {
             }
         } catch (EmptyStackException e) {
             // Error si se intenta extraer carta de la pila vacía
-            e.printStackTrace();
+            throw new IllegalStateException("No se puede repartir una carta. La baraja está vacía.", e);
         }
         return null;
     }
