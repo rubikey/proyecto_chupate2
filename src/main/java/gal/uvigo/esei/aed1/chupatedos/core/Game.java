@@ -64,9 +64,9 @@ public class Game {
         // Se coloca una carta en la mesa
         table.placeCard(deck.deal());
         // Se muestra la carta
-        System.out.println("Carta en la mesa: " + table.getTopCard().toString());
+        iu.displayMessage("Carta en la mesa: " + table.getTopCard().toString());
         // Cartas que quedan en la baraja
-        System.out.println("Cartas restantes: " + deck.getRemainingCards());
+        iu.displayMessage("Cartas restantes: " + deck.getRemainingCards());
         // Mostrar la mano de cada jugador
         for (Player p : players) {
             p.printHand();
