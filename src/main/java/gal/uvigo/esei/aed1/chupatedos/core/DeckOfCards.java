@@ -6,7 +6,7 @@ import java.util.EmptyStackException;
 
 public class DeckOfCards {
 
-    private Stack<Card> deck;
+    private final Stack<Card> deck;
 
     // Método constructor
     public DeckOfCards() {
