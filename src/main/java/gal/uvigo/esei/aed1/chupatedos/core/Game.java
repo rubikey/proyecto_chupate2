@@ -43,10 +43,8 @@ public class Game {
         iu.displayMessage("Cartas restantes: " + deck.getRemainingCards());
         // Mostrar la mano de cada jugador
         for (Player p : players) {
-            p.printHand();
-
+            iu.displayMessage(p.toString());
         }
 
     }
-
 }
