@@ -25,11 +25,6 @@ public class Player {
         hand.add(card);
     }
 
-    // Retorna la lista de cartas que tiene el jugador
-    public List<Card> getHand() {
-        return hand;
-    }
-
     // Mostrar las cartas del jugador
     public void printHand() {
         System.out.println("Cartas de " + name + ":");
