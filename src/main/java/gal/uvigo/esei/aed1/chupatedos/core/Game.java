@@ -45,11 +45,6 @@ public class Game {
             players.add(player);
         }
 
-        // Inicializamos la baraja
-        deck.initializeDeck();
-        // Mezclamos la baraja
-        deck.shuffle();
-
         // Repartimos 7 cartas a cada jugador
         for (int i = 0; i < 7; i++) {
             for (Player p : players) {

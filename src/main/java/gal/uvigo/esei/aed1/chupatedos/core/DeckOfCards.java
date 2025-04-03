@@ -11,13 +11,10 @@ public class DeckOfCards {
     // Método constructor
     public DeckOfCards() {
         deck = new Stack<>();
-    }
-
-    public void initializeDeck() {
-        // Bucle para añadir las 40 cartas
         for (Card card : Card.values()) {
             deck.push(card);
         }
+        this.shuffle();
     }
 
     // Método para barajar
