@@ -25,18 +25,15 @@ public class Player {
         hand.add(card);
     }
 
-    // Retorna la lista de cartas que tiene el jugador
-    public List<Card> getHand() {
-        return hand;
-    }
-
-    // Mostrar las cartas del jugador
-    public void printHand() {
-        System.out.println("Cartas de " + name + ":");
-        for (Card card : hand) {
-            System.out.println(card.toString() + " ");
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        
+        sb.append("Jugador ").append(this.name).append(": ");
+        for (Card card : this.hand){
+            sb.append(card.toString()).append(" ");
         }
-
+        
+        return sb.toString();
     }
-
 }

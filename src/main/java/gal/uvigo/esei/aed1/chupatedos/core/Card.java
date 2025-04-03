@@ -61,23 +61,8 @@ public enum Card {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-
-    StringBuilder suitToDisplay = new StringBuilder();
-    switch (this.suit.name()) {
-      case "OROS" ->
-        suitToDisplay.append("  ").append(this.suit).append(" ");
-      case "COPAS" ->
-        suitToDisplay.append(" ").append(this.suit).append(" ");
-      case "ESPADAS" ->
-        suitToDisplay.append(this.suit);
-      case "BASTOS" ->
-        suitToDisplay.append(this.suit).append(" ");
-    }
-    StringBuilder numberToDisplay = new StringBuilder();
-    numberToDisplay.append(this.number < 10 ? " " + this.number : this.number);
-    sb.append(" [ ").append(suitToDisplay).append(" | ").append(numberToDisplay).append(" ] ");
-
+    sb.append(this.suit.name().charAt(0)).append(this.number);
+    
     return sb.toString();
   }
-
 }

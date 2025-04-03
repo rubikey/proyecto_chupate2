@@ -11,13 +11,10 @@ public class DeckOfCards {
     // Método constructor
     public DeckOfCards() {
         deck = new Stack<>();
-    }
-
-    public void initializeDeck() {
-        // Bucle para añadir las 40 cartas
         for (Card card : Card.values()) {
             deck.push(card);
         }
+        this.shuffle();
     }
 
     // Método para barajar
@@ -28,14 +25,8 @@ public class DeckOfCards {
     // Coger la siguiente carta (top) de la baraja usando pop. Elimina la carta de
     // la baraja al repartir.
     public Card deal() {
-        try {
-            if (!deck.isEmpty()) {
-                System.out.println(deck.size());
-                return deck.pop();
-            }
-        } catch (EmptyStackException e) {
-            // Error si se intenta extraer carta de la pila vacía
-            throw new IllegalStateException("No se puede repartir una carta. La baraja está vacía.", e);
+        if (!deck.isEmpty()) {
+            return deck.pop();
         }
         return null;
     }
