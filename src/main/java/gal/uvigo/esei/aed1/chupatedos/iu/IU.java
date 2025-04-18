@@ -63,8 +63,46 @@ public class IU {
         System.out.println(msg);
     }
 
+    /**
+     * Pregunta al usuario el numero de jugadores & posteriormente pide el
+     * nombre de cada uno de ellos
+     *
+     * @return devuelve un array primitivo de elmentos Player
+     */
+    public Player[] getPlayers() {
+        // Declaramos e inicializamos la variable para el número de jugadores
+        int numOfPlayers = 0;
 
-    
+        // Bucle do-while para solicitar el número de jugadores hasta que sea válido
+        // (entre 2 y 5)
+        do {
+            numOfPlayers = this.readNumber("Cuantos jugadores van a jugar? (Entre 2 y 5): ");
+        } while (numOfPlayers < 2 || numOfPlayers > 5);
 
-    
+        Player[] players = new Player[numOfPlayers];
+
+        // Creamos los jugadores y los agregamos a la lista
+        for (int i = 0; i < numOfPlayers; i++) {
+            players[i] = new Player(this.readString("Nombre del jugador " + (i + 1) + ": "));
+        }
+
+        return players;
+    }
+
+    public void showHand(List<Card> hand, List<Card> playableCards) {
+        System.out.println("Tu mano: ");
+        for (int i = 0; i < hand.size(); i++) {
+            System.out.println(i + ": " + hand.get(i));
+        }
+
+        System.out.println("Cartas jugables: ");
+        for (int i = 0; i < playableCards.size(); i++) {
+            System.out.println(i + ": " + playableCards.get(i));
+        }
+    }
+
+    public int askCardToPlay(List<Card> jugables) {
+        return readNumber("Selecciona la posición de la carta que quieras jugar: ");
+    }
+
 }
