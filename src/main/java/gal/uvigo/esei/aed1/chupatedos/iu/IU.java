@@ -86,5 +86,40 @@ public class IU {
         
         return players;
     }
+    
+        public Card selectPlayableCard(List<Card> validCards) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Cartas  disponibles: ");
 
+        for (int i = 0; i < validCards.size(); i++) {
+            sb.append("[").append(i + 1).append("]: ").append(validCards.get(i).toString());
+
+            if (i != validCards.size() - 1) {
+                sb.append(", ");
+            }
+        }
+        
+        if (validCards.size() == 1) {
+            sb.append("\n").append("Como solo existe ").append(validCards.get(0).toString()).append(" se utilizara esa.");
+            this.displayMessage(sb.toString());
+            return validCards.get(0);
+        }
+        
+        sb.append("\n").append("Introduce la carta a utilizar: ");
+        
+        Card selectedCard = null;
+
+        do {
+            int selectedIndex = this.readNumber(sb.toString());
+
+            try {
+                selectedCard = validCards.get(selectedIndex - 1);
+            } catch (Exception e) {
+                this.displayMessage("El indice introducido no corresponde a ninguna carta. Intentelo de nuevo...");
+            }
+
+        } while (selectedCard == null);
+
+        return selectedCard;
+    }
 }

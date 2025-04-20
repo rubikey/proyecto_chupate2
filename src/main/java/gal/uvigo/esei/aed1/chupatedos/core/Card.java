@@ -57,6 +57,10 @@ public enum Card {
   public Suit getSuit() {
     return this.suit;
   }
+  
+  public boolean equals(Card card){
+      return this.number == card.getNumber() || this.suit == card.getSuit();
+  }
 
   @Override
   public String toString() {

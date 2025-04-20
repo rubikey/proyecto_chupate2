@@ -2,11 +2,10 @@ package gal.uvigo.esei.aed1.chupatedos.core;
 
 import java.util.Collections;
 import java.util.Stack;
-import java.util.EmptyStackException;
 
 public class DeckOfCards {
 
-    private final Stack<Card> deck;
+    private Stack<Card> deck;
 
     // Método constructor
     public DeckOfCards() {
@@ -20,6 +19,11 @@ public class DeckOfCards {
     // Método para barajar
     public void shuffle() {
         Collections.shuffle(deck);
+    }
+    
+    public void setNewDeck(Stack<Card> deck){
+        this.deck = deck;
+        this.shuffle();
     }
 
     // Coger la siguiente carta (top) de la baraja usando pop. Elimina la carta de

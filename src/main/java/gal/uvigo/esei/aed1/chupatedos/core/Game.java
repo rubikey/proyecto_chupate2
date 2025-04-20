@@ -1,6 +1,8 @@
 package gal.uvigo.esei.aed1.chupatedos.core;
 
 import gal.uvigo.esei.aed1.chupatedos.iu.IU;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Game {
 
@@ -24,7 +26,6 @@ public class Game {
      * Método para iniciar el juego. Solicita el número de jugadores, crea los
      * jugadores, inicializa la baraja y reparte las cartas.
      */
-
     public void start() {
         // Repartimos 7 cartas a cada jugador
         for (int i = 0; i < 7; i++) {
@@ -37,6 +38,63 @@ public class Game {
 
         // Se coloca una carta en la mesa
         table.placeCard(deck.deal());
+        //Mostramos el estado de la mesa
+        this.tableState();
+
+        int turno = 0;
+        Player jugadorGanador = null;
+        while (jugadorGanador == null) {
+            Player currentPlayer = players[turno];
+
+            //Mostramos la mano jugador activo
+            iu.displayMessage("-----------------------------------------------------");
+            iu.displayMessage("Turno de " + currentPlayer.getName());
+            iu.displayMessage(currentPlayer.toString());
+
+            boolean pierdeTurno = false;
+
+            //Mostramos las cartas disponibles para jugar & hacemos escoger al usuario una carta
+            List<Card> validCards = currentPlayer.getPlayableCards(table.getTopCard());
+            if (validCards.isEmpty()) { //El usuario debera robar una carta 
+                iu.displayMessage("El jugador no tiene ninguna carta valida por lo que debera robar una de la mesa.");
+                Card stolenCard = deck.deal();
+
+                if (!table.getTopCard().equals(stolenCard)) {
+                    iu.displayMessage("Como la carta robada " + stolenCard.toString() + " no es jugable, el jugador pierde turno.");
+                    pierdeTurno = true;
+                } else {
+                    iu.displayMessage("Carta robada " + stolenCard.toString());
+                    validCards.add(stolenCard);
+                }
+                currentPlayer.addCard(stolenCard);
+            }
+
+            if (!pierdeTurno) {
+                Card playedCard = iu.selectPlayableCard(validCards);
+                iu.displayMessage("El jugador juega " + playedCard.toString());
+                currentPlayer.removeCard(playedCard);
+                table.placeCard(playedCard);
+            }
+
+            if (currentPlayer.isHandEmpty()) {
+                jugadorGanador = currentPlayer;
+            } else {
+                if (this.deck.getRemainingCards() == 0) {
+                    deck.setNewDeck(table.deleteAllButLastCard());
+                }
+
+                this.tableState();
+            }
+
+            turno = (turno - 1 + players.length) % players.length;
+        }
+
+        iu.displayMessage("----------------------------------------");
+        iu.displayMessage("El jugador " + jugadorGanador.getName() + " es el Ganador.");
+    }
+
+    private void tableState() {
+        iu.displayMessage("-----------------------------------------------------");
         // Se muestra la carta
         iu.displayMessage("Carta en la mesa: " + table.getTopCard().toString());
         // Cartas que quedan en la baraja
@@ -45,6 +103,5 @@ public class Game {
         for (Player p : players) {
             iu.displayMessage(p.toString());
         }
-
     }
 }

@@ -24,6 +24,25 @@ public class Player {
     public void addCard(Card card) {
         hand.add(card);
     }
+    
+    public void removeCard(Card card){
+        hand.remove(card);
+    }
+    
+    public boolean isHandEmpty(){
+        return this.hand.isEmpty();
+    }
+    
+    public List<Card> getPlayableCards(Card topCard){
+        List<Card> validCards = new ArrayList<>();
+        for (Card card : this.hand){
+            if (topCard.equals(card)){
+                validCards.add(card);
+            }
+        }
+        
+        return validCards;
+    }
 
     @Override
     public String toString() {
