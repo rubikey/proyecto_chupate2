@@ -1,4 +1,5 @@
 package gal.uvigo.esei.aed1.chupatedos.core;
+
 import java.util.List;
 import gal.uvigo.esei.aed1.chupatedos.iu.IU;
 
@@ -20,130 +21,97 @@ public class Game {
 
     }
 
-    /**
-     * Método para iniciar el juego. Solicita el número de jugadores, crea los
-     * jugadores, inicializa la baraja y reparte las cartas.
-     */
+    // Inicia el juego
     public void start() {
-        dealInitialCards();    // reparto
-        playGame();            // Bucle principal 
+        dealInitialCards(); // Reparte cartas iniciales
+        playGame(); // Comienza el bucle principal
     }
 
-    // Reparte 7 cartas a cada jugador 
+    // Reparte 7 cartas a cada jugador y coloca la primera en mesa
     private void dealInitialCards() {
         for (int i = 0; i < 7; i++) {
             for (Player player : players) {
                 player.addCard(deck.deal());
             }
         }
-        table.placeCard(deck.deal());        // Colocar primera carta en la mesa
-        iu.displayMessage("Carta en mesa: " + table.getTopCard());
-        iu.displayMessage("Cartas en mazo: " + deck.getRemainingCards());
-        showAllHands();  // Muestra manos iniciales
+        table.placeCard(deck.deal());
+        iu.displayMessage("Carta en la mesa: " + table.getTopCard());
+        iu.displayMessage("Cartas restantes: " + deck.getRemainingCards());
+        // Muestra manos iniciales
+        for (Player p : players) {
+            iu.displayMessage(p.toString());
+        }
         iu.displayMessage("\nCOMIENZA EL JUEGO");
     }
 
-    // Muestra las cartas de todos los jugadores
-    private void showAllHands() {
-        for (Player player : players) {
-            iu.displayMessage(player.getName() + ": " + formatHand(player.getHand()));
-        }
-    }
-
-    //BUCLE PRINCIPAL 
+    // Bucle principal del juego
     private void playGame() {
-        int currentPlayer = 0;
+        int turn = 0;
         while (true) {
-            Player player = players[currentPlayer];
-            playTurn(player); // Gestiona el turno
-            if (player.getHand().isEmpty()) { // Verifica si el jugador ganó
-                iu.displayMessage("\n¡" + player.getName() + " ha ganado!");
+            Player currentPlayer = players[turn];
+            iu.displayMessage("\nTurno de " + currentPlayer.getName());
+            iu.displayMessage("Mesa: " + table.getTopCard());
+
+            //Verifica si el jugador ya no tiene cartas (ganó)
+            if (currentPlayer.getHand().isEmpty()) {
+                iu.displayMessage("\n¡" + currentPlayer.getName() + " ha ganado!");
                 break;
             }
-            currentPlayer = (currentPlayer + 1) % players.length; // Siguiente jugador
+
+            //Obtener cartas jugables
+            List<Card> playableCards = currentPlayer.getPlayableCard(table.getTopCard());
+            iu.showHand(currentPlayer.getHand(), playableCards);
+
+            //jugar o robar
+            if (!playableCards.isEmpty()) {
+                int choice = iu.askCardToPlay(playableCards);
+                Card selectedCard = playableCards.get(choice);
+                currentPlayer.playCard(selectedCard);
+                table.placeCard(selectedCard);
+                iu.displayMessage("Jugaste: " + selectedCard);
+            } else {
+                handleNoPlayableCards(currentPlayer);
+            }
+
+            //Verificar victoria
+            if (currentPlayer.getHand().isEmpty()) {
+                iu.displayMessage("\n¡" + currentPlayer.getName() + " ha ganado!");
+                break;
+            }
+
+            //siguiente jugador
+            turn = (turn + 1) % players.length;
         }
     }
 
-    private void playTurn(Player player) {
-        iu.displayMessage("\nTurno de " + player.getName());
-        iu.displayMessage("Mesa: " + table.getTopCard());
-        iu.displayMessage("Tu mano: " + formatHand(player.getHand()));
+    // Maneja cuando el jugador no tiene cartas jugables
+    private void handleNoPlayableCards(Player player) {
+        iu.displayMessage("No hay cartas jugables. Robando carta...");
+        Card drawnCard = deck.deal();
 
-        List<Card> playable = player.getPlayableCards(table.getTopCard());
+        if (drawnCard != null) {
+            player.addCard(drawnCard);
+            iu.displayMessage("Robaste: " + drawnCard);
 
-        if (!playable.isEmpty()) {
-            playCard(player, playable); // Jugar carta si es posible
-        } else {
-            drawCard(player); // Robar carta si no hay jugables
-        }
-    }
-
-    private void playCard(Player player, List<Card> playable) {
-        iu.displayMessage("Jugables: " + formatPlayable(playable));
-        int choice = getValidChoice(playable.size()); // Obtiene selección válida
-
-        Card selected = playable.get(choice);
-        player.playCard(player.getHand().indexOf(selected)); // Elimina carta de mano
-        table.placeCard(selected); // Coloca carta en mesa
-        iu.displayMessage("Jugaste: " + selected);
-    }
-
-// Valida la selección de carta del jugador
-    private int getValidChoice(int max) {
-        int choice = iu.readNumber("Elige carta (número): ");
-        while (choice < 0 || choice >= max) {
-            choice = iu.readNumber("Inválido. Elige 0-" + (max - 1) + ": ");
-        }
-        return choice;
-    }
-
-    // Maneja el robo de carta 
-    private void drawCard(Player player) {
-        iu.displayMessage("No hay cartas jugables. Roba");
-        Card newCard = deck.deal();
-        if (newCard != null) {
-            player.addCard(newCard);
-            iu.displayMessage("Robaste: " + newCard);
-
-            if (newCard.getNumber() == table.getTopCard().getNumber()
-                    || newCard.getSuit() == table.getTopCard().getSuit()) {
-                player.playCard(player.getHand().size() - 1);
-                table.placeCard(newCard);
-                iu.displayMessage("Jugada automática: " + newCard);
+            // Si la carta robada es jugable, se juega automáticamente
+            if (drawnCard.isPlayable(table.getTopCard())) {
+                player.playCard(drawnCard);
+                table.placeCard(drawnCard);
+                iu.displayMessage("Jugaste automáticamente: " + drawnCard);
             }
         } else {
-            iu.displayMessage("No quedan cartas en el mazo");
-            recycleCards();
+            // Reciclar cartas si el mazo está vacío
+            iu.displayMessage("No quedan cartas en el mazo. Reciclando...");
+            List<Card> recycledCards = table.recycleCards();
+            if (recycledCards.isEmpty()) {
+                iu.displayMessage("No hay cartas para reciclar. ¡Juego bloqueado!");
+                System.exit(0);  // Terminar si no hay cartas
+            }
+            for (Card card : recycledCards) {
+                deck.addCard(card);
+            }
+            deck.shuffle();
+            iu.displayMessage("Cartas recicladas: " + deck.getRemainingCards());
         }
-    }
-
-    // Recicla cartas si el mazo está vacío    
-    private void recycleCards() {
-        Card lastCard = table.getTopCard(); // Guarda la última carta
-        // Devuelve las demás cartas al mazo
-        while (table.getFaceupCounter() > 1) {
-            deck.addCard(table.removeCard());
-        }
-        deck.shuffle(); // Baraja las cartas recicladas
-        iu.displayMessage("Nuevo mazo: " + deck.getRemainingCards());
-    }
-    
-    //StringBuilder
-    private String formatHand(List<Card> hand) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < hand.size(); i++) {
-            if (i > 0) sb.append(" ");
-            sb.append("(").append(i).append(")").append(hand.get(i));
-        }
-        return sb.toString();
-    }
-
-    private String formatPlayable(List<Card> playable) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < playable.size(); i++) {
-            if (i > 0) sb.append(" ");
-            sb.append(i).append(":").append(playable.get(i));
-        }
-        return sb.toString();
     }
 }

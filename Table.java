@@ -1,7 +1,10 @@
 package gal.uvigo.esei.aed1.chupatedos.core;
 
+import java.util.ArrayList;
 import java.util.EmptyStackException;
+import java.util.List;
 import java.util.Stack;
+
 
 public class Table {
 
@@ -30,6 +33,14 @@ public class Table {
     // Método para quitar y devolver la carta superior
     public Card removeCard() throws EmptyStackException {
         return faceupCards.pop();
+    }
+    
+    public List<Card> recycleCards() {
+        List<Card> recycled = new ArrayList<>();
+        while (faceupCards.size() > 1) {
+            recycled.add(faceupCards.pop());
+        }
+        return recycled;
     }
 
 }

@@ -31,46 +31,30 @@ public class Player {
 
 
     //las cartas jugables según la carta superior en mesa
-    public List<Card> getPlayableCards(Card topCard) {
-        List<Card> playableCards = new ArrayList<>();
+     public List<Card> getPlayableCard(Card topCard) {
+        List<Card> playable = new ArrayList<>();
         for (Card card : hand) {
-            if (card.getNumber() == topCard.getNumber() || card.getSuit() == topCard.getSuit()) {
-                playableCards.add(card);
+            if (card.isPlayable(topCard)) {
+                playable.add(card);
             }
         }
-        return playableCards;
+        return playable;
     }
-    
+   
     // devuelve la carta jugada
-    public Card playCard(int index) {
-        if (index >= 0 && index < hand.size()) {
-            return hand.remove(index);
-        }
-        return null;
+   public Card playCard(Card card) {
+        hand.remove(card);
+        return card;
     }
+
     
-    //Para robar cartas del mazo
-    public void drawCard(DeckOfCards deck) {
-        Card drawnCard = deck.deal();
-        if (drawnCard != null) {
-            hand.add(drawnCard);
-        }
-    }
-
-    // Verifica si hay cartas jugables
-    public boolean hasPlayableCards(Card topCard) {
-        return !getPlayableCards(topCard).isEmpty();
-    }
-
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        
-        sb.append("Jugador ").append(this.name).append(": ");
-        for (Card card : this.hand){
-            sb.append(card.toString()).append(" ");
+        sb.append("Mano de ").append(name).append(": ");
+        for (int i = 0; i < hand.size(); i++) {
+            sb.append("(").append(i).append(")").append(hand.get(i)).append(" ");
         }
-        
-        return sb.toString();
+        return sb.toString().trim();
     }
 }

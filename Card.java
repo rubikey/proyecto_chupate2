@@ -57,7 +57,11 @@ public enum Card {
   public Suit getSuit() {
     return this.suit;
   }
-
+ 
+  public boolean isPlayable(Card other) {
+    return this.suit == other.suit || this.number == other.number;
+  }
+  
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();

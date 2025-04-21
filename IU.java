@@ -12,111 +12,84 @@ import java.util.Scanner;
 
 public class IU {
 
-    private final Scanner keyboard;
+    private final Scanner keyboard; // Scanner para leer entrada del usuario
 
     public IU() {
-        keyboard = new Scanner(System.in);
+        keyboard = new Scanner(System.in); // Inicializa el scanner
     }
 
-    /**
-     * Lee un num. de teclado
-     *
-     * @param msg El mensaje a visualizar.
-     * @return El num., como entero
-     */
+    // Lee un número entero del usuario con validación
     public int readNumber(String msg) {
         boolean repeat;
         int toret = 0;
-
         do {
             repeat = false;
             System.out.print(msg);
             try {
                 toret = Integer.parseInt(keyboard.nextLine());
             } catch (NumberFormatException exc) {
-                repeat = true;
+                repeat = true; // Repetir si no es un número válido
             }
         } while (repeat);
-
         return toret;
     }
 
-    /**
-     * Lee un string de teclado
-     *
-     * @param msg mensaje a mostrar antes de la lectura
-     * @return el string leido
-     */
+    // Lee un string del usuario
     public String readString(String msg) {
-        String toret;
         System.out.print(msg);
-        toret = keyboard.nextLine();
-        return toret;
+        return keyboard.nextLine();
     }
 
-    /**
-     * muestra un mensaje por pantalla
-     *
-     * @param msg el mensaje a mostrar
-     */
+    // Muestra un mensaje en pantalla
     public void displayMessage(String msg) {
         System.out.println(msg);
     }
 
-    /**
-     * Pregunta al usuario el numero de jugadores & posteriormente pide el
-     * nombre de cada uno de ellos
-     *
-     * @return devuelve un array primitivo de elmentos Player
-     */
+    // Obtiene los jugadores y sus nombres
     public Player[] getPlayers() {
-        // Declaramos e inicializamos la variable para el número de jugadores
         int numOfPlayers = 0;
-
-        // Bucle do-while para solicitar el número de jugadores hasta que sea válido
-        // (entre 2 y 5)
+        // Pide número de jugadores (entre 2 y 5)
         do {
             numOfPlayers = this.readNumber("Cuantos jugadores van a jugar? (Entre 2 y 5): ");
         } while (numOfPlayers < 2 || numOfPlayers > 5);
 
         Player[] players = new Player[numOfPlayers];
-
-        // Creamos los jugadores y los agregamos a la lista
+        // Pide nombre de cada jugador
         for (int i = 0; i < numOfPlayers; i++) {
             players[i] = new Player(this.readString("Nombre del jugador " + (i + 1) + ": "));
         }
-
         return players;
     }
-    // seleccionar cartas jugables
-    public int selectPlayableCard(List<Card> playableCards) {
-        displayMessage("\nCartas jugables:");
-        for (int i = 0; i < playableCards.size(); i++) {
-            displayMessage(i + ": " + playableCards.get(i).toString());
-        }
 
-        int selection;
-        do {
-            selection = readNumber("Selecciona una carta (0-" + (playableCards.size() - 1) + "): ");
-            if (selection < 0 || selection >= playableCards.size()) {
-                displayMessage("Selección inválida. Elige un número entre 0 y " + (playableCards.size() - 1));
-            }
-        } while (selection < 0 || selection >= playableCards.size());
-
-        return selection;
-    }
-    // Muestra la mano del jugador 
-    public void showPlayerHand(List<Card> hand) {
-        displayMessage("\nTu mano actual:");
+    public void showHand(List<Card> hand, List<Card> playableCards) {
+        // Muestra mano completa 
+        StringBuilder handDisplay = new StringBuilder("Tu mano: ");
         for (int i = 0; i < hand.size(); i++) {
-            displayMessage(i + ": " + hand.get(i).toString());
+            handDisplay.append("(").append(i).append(")").append(hand.get(i)).append(" ");
+        }
+        displayMessage(handDisplay.toString().trim());
+
+        // Muestra cartas jugables 
+        if (!playableCards.isEmpty()) {
+            StringBuilder playableDisplay = new StringBuilder("Cartas jugables: ");
+            for (int i = 0; i < playableCards.size(); i++) {
+                playableDisplay.append(i).append(":").append(playableCards.get(i)).append(" ");
+            }
+            displayMessage(playableDisplay.toString().trim());
+        } else {
+            displayMessage("No tienes cartas jugables");
         }
     }
-    // Muestra el estado del juego
-    public void showGameStatus(Card topCard, int remainingCards) {
-        displayMessage("\n--- Estado del juego ---");
-        displayMessage("Carta en la mesa: " + topCard.toString());
-        displayMessage("Cartas restantes en el mazo: " + remainingCards);
-        displayMessage("------------------------");
+
+    // Pide al jugador que seleccione una carta para jugar
+    public int askCardToPlay(List<Card> playableCards) {
+        int choice;
+        do {
+            choice = readNumber("Elige carta (número): ");
+            if (choice < 0 || choice >= playableCards.size()) {
+                displayMessage("Selección inválida. Intentalo nuevamente.");
+            }
+        } while (choice < 0 || choice >= playableCards.size());
+        return choice;
     }
 }
