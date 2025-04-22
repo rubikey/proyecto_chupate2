@@ -16,12 +16,13 @@ public class DeckOfCards {
         this.shuffle();
     }
 
-    // Método para barajar
-    public void shuffle() {
+    // Método para barajar privado ya que siempre barajamos desde la propia clase
+    private void shuffle() {
         Collections.shuffle(deck);
     }
     
-    public void setNewDeck(Stack<Card> deck){
+    //Cuando se acaben las cartas del deck este metodo servira para establecer las nuevas cartas del deck
+    public void setNewDeck(Stack<Card> deck){ 
         this.deck = deck;
         this.shuffle();
     }

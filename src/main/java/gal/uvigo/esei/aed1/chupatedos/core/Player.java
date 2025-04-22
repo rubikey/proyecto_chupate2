@@ -33,10 +33,11 @@ public class Player {
         return this.hand.isEmpty();
     }
     
-    public List<Card> getPlayableCards(Card topCard){
+    //Nos devuelve la lista de Card jugables contra una Card de referencia
+    public List<Card> getPlayableCards(Card topCard){ 
         List<Card> validCards = new ArrayList<>();
         for (Card card : this.hand){
-            if (topCard.equals(card)){
+            if (topCard.isCardPlayable(card)){
                 validCards.add(card);
             }
         }

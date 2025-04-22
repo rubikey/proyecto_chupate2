@@ -1,12 +1,7 @@
 package gal.uvigo.esei.aed1.chupatedos.iu;
 
 import gal.uvigo.esei.aed1.chupatedos.core.Card;
-import gal.uvigo.esei.aed1.chupatedos.core.DeckOfCards;
 import gal.uvigo.esei.aed1.chupatedos.core.Player;
-import gal.uvigo.esei.aed1.chupatedos.core.Suit;
-import gal.uvigo.esei.aed1.chupatedos.core.Table;
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -62,12 +57,24 @@ public class IU {
     public void displayMessage(String msg) {
         System.out.println(msg);
     }
+    
     /**
-     * Pregunta al usuario el numero de jugadores & posteriormente pide el nombre de cada uno de ellos
-     * 
-     * @return devuelve un array primitivo de elmentos Player 
+     * muestra un mensaje por pantalla con un separador
+     *
+     * @param msg el mensaje a mostrar tras el separador
      */
-    public Player[] getPlayers(){
+    public void displayMessageSeparator(String msg) {
+        System.out.println("------------------------------------------------------------------------");
+        System.out.println(msg);
+    }
+
+    /**
+     * Pregunta al usuario el numero de jugadores & posteriormente pide el
+     * nombre de cada uno de ellos
+     *
+     * @return devuelve un array primitivo de elmentos Player
+     */
+    public Player[] getPlayers() {
         // Declaramos e inicializamos la variable para el número de jugadores
         int numOfPlayers = 0;
 
@@ -76,18 +83,24 @@ public class IU {
         do {
             numOfPlayers = this.readNumber("Cuantos jugadores van a jugar? (Entre 2 y 5): ");
         } while (numOfPlayers < 2 || numOfPlayers > 5);
-        
+
         Player[] players = new Player[numOfPlayers];
 
         // Creamos los jugadores y los agregamos a la lista
         for (int i = 0; i < numOfPlayers; i++) {
-            players[i] = new Player(this.readString("Nombre del jugador " + (i+1) + ": "));
+            players[i] = new Player(this.readString("Nombre del jugador " + (i + 1) + ": "));
         }
-        
+
         return players;
     }
-    
-        public Card selectPlayableCard(List<Card> validCards) {
+
+    /**
+     * 
+     * @param validCards
+     * @return La carta seleccionada por el usuario del conjunto pasado
+     */
+    public Card selectPlayableCard(List<Card> validCards) {
+        //Construccion del string que se muestra al usuario con sus cartas disponibles
         StringBuilder sb = new StringBuilder();
         sb.append("Cartas  disponibles: ");
 
@@ -98,17 +111,19 @@ public class IU {
                 sb.append(", ");
             }
         }
-        
+
+        //Si solo existe una carta en la lista, se forzara la seleccion
         if (validCards.size() == 1) {
             sb.append("\n").append("Como solo existe ").append(validCards.get(0).toString()).append(" se utilizara esa.");
             this.displayMessage(sb.toString());
             return validCards.get(0);
         }
-        
-        sb.append("\n").append("Introduce la carta a utilizar: ");
-        
-        Card selectedCard = null;
 
+        sb.append("\n").append("Introduce la carta a utilizar: ");
+
+        
+        //Hasta que el usuario no seleccione una Card valida no continuamos
+        Card selectedCard = null;
         do {
             int selectedIndex = this.readNumber(sb.toString());
 

@@ -1,8 +1,6 @@
 package gal.uvigo.esei.aed1.chupatedos.core;
 
-import java.util.ArrayList;
 import java.util.EmptyStackException;
-import java.util.List;
 import java.util.Stack;
 
 public class Table {
@@ -25,9 +23,10 @@ public class Table {
         return faceupCards.peek();
     }
     
-    public Stack<Card> deleteAllButLastCard(){
+    //Metodo para eliminar todas las cartas excepto la ultima y devolver las cartas eliminadas en un Stack<>
+    public Stack<Card> deleteAllExceptLastCard(){
         Stack<Card> cards = new Stack<>(); //Declaramos vacio para que la referencia de objeto sea diferente
-        cards.addAll(faceupCards);
+        cards.addAll(faceupCards); //Insertamos todas las cartas del Stack<> de this a el nuevo Objeto
         cards.remove(this.getTopCard()); //Eliminamos la ultima carta que corresponde a la ultima que esta boca arriba
         
         faceupCards.removeIf(card -> card != this.getTopCard()); //Del Stack<> de this eliminamos todas las Card excepto la ultima boca arriba

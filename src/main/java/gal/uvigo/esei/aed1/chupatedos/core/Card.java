@@ -58,7 +58,7 @@ public enum Card {
     return this.suit;
   }
   
-  public boolean equals(Card card){
+  public boolean isCardPlayable(Card card){
       return this.number == card.getNumber() || this.suit == card.getSuit();
   }
 
