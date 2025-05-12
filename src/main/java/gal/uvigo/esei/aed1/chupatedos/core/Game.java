@@ -27,9 +27,9 @@ public class Game {
      */
     public void start() {
         this.players = iu.getPlayers(); //inicializamos jugadores
-        
+
         deck.shuffle(); //Barajamos baraja
-        
+
         // Repartimos 7 cartas a cada jugador
         for (int i = 0; i < 7; i++) {
             for (Player player : players) {
@@ -45,58 +45,73 @@ public class Game {
 
         int turno = 0;
         boolean partidaFinalizada = false;
-        
+        int sentido = -1;
+        boolean penalizacionTurno = table.getTopCard().getNumber() == 2;
+
         while (!partidaFinalizada) {
+
             Player currentPlayer = players[turno];
 
             //Mostramos la mano jugador activo
             iu.displayMessageSeparator("Turno de " + currentPlayer.getName());
             iu.displayMessage(currentPlayer.toString());
 
-            boolean pierdeTurno = false;
+            if (!penalizacionTurno) {
+                boolean tieneCartasJugables = false;
 
-            //Extraemos todas las cartas validas que tiene el usuario disponible para la carta boca arriba
-            List<Card> validCards = currentPlayer.getPlayableCards(table.getTopCard());
-            
-            //Si la lista de cartas validas esta vacia (El usuario NO tiene cartas para jugar)
-            if (validCards.isEmpty()) { //El usuario debera robar una carta 
-                iu.displayMessage("El jugador no tiene ninguna carta valida por lo que debera robar una de la mesa.");
-                Card stolenCard = deck.deal();
+                //Extraemos todas las cartas validas que tiene el usuario disponible para la carta boca arriba
+                List<Card> validCards = currentPlayer.getPlayableCards(table.getTopCard());
 
-                if (!table.getTopCard().isCardPlayable(stolenCard)) { //Si la carta ROBADA NO es jugable: Pierde turno
-                    iu.displayMessage("Como la carta robada " + stolenCard.toString() + " no es jugable, el jugador pierde turno.");
-                    pierdeTurno = true;
-                } else { //Si la carta ROBADA es jugable: NO pierde turno y la anadimos a Lista de cartas validas
-                    iu.displayMessage("Carta robada " + stolenCard.toString());
-                    validCards.add(stolenCard);
-                }
-                currentPlayer.addCard(stolenCard); //La carta siempre se anadira a la baraja del jugador independientemente de los casos anteriores
-            }
+                //Si la lista de cartas validas esta vacia (El usuario NO tiene cartas para jugar)
+                if (validCards.isEmpty()) { //El usuario debera robar una carta 
+                    iu.displayMessage("El jugador no tiene ninguna carta valida por lo que debera robar una de la mesa.");
+                    Card stolenCard = deck.deal();
 
-            //Comprobamos si el usuario ha perdido el turno (No tiene cartas validas)
-            if (!pierdeTurno) {
-                Card playedCard = iu.selectPlayableCard(validCards); //Pasamos la lista de cartas mediante un metodo ui para que el usuario mediante inputs selecciona una carta
-                iu.displayMessage("El jugador juega " + playedCard.toString());
-                currentPlayer.removeCard(playedCard); //Eliminamos carta de la mano del jugador
-                table.placeCard(playedCard); //Anadimos la carta a la barja boca arriba de table
-            }
-
-            //SComprobamos si la mano del jugador esta vacia (Ha ganado)
-            if (currentPlayer.isHandEmpty()) {
-                iu.displayMessageSeparator("El jugador " + currentPlayer.getName() + " es el Ganador.");
-                partidaFinalizada = true;
-            } else { //Si el jugador aun no ha ganado comprobamos que haya cartas en la mesa para el proximo turno
-                if (this.deck.getRemainingCards() == 0) {
-                    deck.setNewDeck(table.deleteAllExceptLastCard());//Si no hay cartas en la mesa las extraemos de las boca arriba en table excepto la ultima
-                    deck.shuffle(); //barajamos cartas
+                    if (!table.getTopCard().isCardPlayable(stolenCard)) { //Si la carta ROBADA NO es jugable: Pierde turno
+                        iu.displayMessage("Como la carta robada " + stolenCard.toString() + " no es jugable, el jugador pierde turno.");
+                        tieneCartasJugables = true;
+                    } else { //Si la carta ROBADA es jugable: NO pierde turno y la anadimos a Lista de cartas validas
+                        iu.displayMessage("Carta robada " + stolenCard.toString());
+                        validCards.add(stolenCard);
+                    }
+                    currentPlayer.addCard(stolenCard); //La carta siempre se anadira a la baraja del jugador independientemente de los casos anteriores
                 }
 
-                //Mostramos el estado de la mesa tras cada jugada
-                this.tableState();
+                //Comprobamos si el usuario ha perdido el turno (No tiene cartas validas)
+                if (!tieneCartasJugables) {
+                    Card playedCard = iu.selectPlayableCard(validCards); //Pasamos la lista de cartas mediante un metodo ui para que el usuario mediante inputs selecciona una carta
+                    if (playedCard.getNumber() == 7) {
+                        sentido *= -1;
+                    } else if (playedCard.getNumber() == 2) {
+                        penalizacionTurno = true;
+                    }
+
+                    iu.displayMessage("El jugador juega " + playedCard.toString());
+                    currentPlayer.removeCard(playedCard); //Eliminamos carta de la mano del jugador
+                    table.placeCard(playedCard); //Anadimos la carta a la barja boca arriba de table
+                }
+
+                //SComprobamos si la mano del jugador esta vacia (Ha ganado)
+                if (currentPlayer.isHandEmpty()) {
+                    iu.displayMessageSeparator("El jugador " + currentPlayer.getName() + " es el Ganador.");
+                    partidaFinalizada = true;
+                } else { //Si el jugador aun no ha ganado comprobamos que haya cartas en la mesa para el proximo turno
+                    if (this.deck.getRemainingCards() == 0) {
+                        deck.setNewDeck(table.deleteAllExceptLastCard());//Si no hay cartas en la mesa las extraemos de las boca arriba en table excepto la ultima
+                        deck.shuffle(); //barajamos cartas
+                    }
+
+                    //Mostramos el estado de la mesa tras cada jugada
+                    this.tableState();
+                }
+            }else{
+                for (int i = 0; i < 2; i++) {
+                    players[turno].addCard(deck.deal());
+                }
             }
 
             //Metodo con modulador para hacer un ciclo en contra de las agujas del reloj
-            turno = (turno - 1 + players.length) % players.length;
+            turno = (turno + sentido + players.length) % players.length;
         }
     }
 

@@ -61,7 +61,7 @@ public enum Card {
   public boolean isCardPlayable(Card card){
       return this.number == card.getNumber() || this.suit == card.getSuit();
   }
-
+  
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
