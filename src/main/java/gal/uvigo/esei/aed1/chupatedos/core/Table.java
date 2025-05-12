@@ -26,10 +26,13 @@ public class Table {
     //Metodo para eliminar todas las cartas excepto la ultima y devolver las cartas eliminadas en un Stack<>
     public Stack<Card> deleteAllExceptLastCard(){
         Stack<Card> cards = new Stack<>(); //Declaramos vacio para que la referencia de objeto sea diferente
-        cards.addAll(faceupCards); //Insertamos todas las cartas del Stack<> de this a el nuevo Objeto
-        cards.remove(this.getTopCard()); //Eliminamos la ultima carta que corresponde a la ultima que esta boca arriba
         
-        faceupCards.removeIf(card -> card != this.getTopCard()); //Del Stack<> de this eliminamos todas las Card excepto la ultima boca arriba
+        //Eliminamos el primer indice hasta que solo quede 1 carta ; significa que queda la ultima carta que estaba boca arriba
+        Card topCard = faceupCards.pop(); // guardamos el tope
+        while (!faceupCards.isEmpty()) {
+            cards.push(faceupCards.pop()); // quitamos todo lo demas
+        }
+        faceupCards.push(topCard); // restauramos la ultima carta jugada (top)
         
         return cards;
     }

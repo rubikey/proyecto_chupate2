@@ -9,7 +9,7 @@ public class Game {
     private final IU iu; // Referencia a la interfaz de usuario
     private final DeckOfCards deck;
     private final Table table;
-    private final Player[] players;
+    private Player[] players;
     // Lista de jugadores
 
     // Constructor para inicializar los atributos
@@ -17,7 +17,7 @@ public class Game {
         this.iu = iu; // Se asigna la interfaz de usuario pasada como parámetro
         this.deck = new DeckOfCards(); // Se crea una nueva baraja
         this.table = new Table(); // Se crea una nueva mesa
-        this.players = iu.getPlayers(); // Se inicializa la lista de jugadores
+        this.players = null; // Se inicializa la lista de jugadores
 
     }
 
@@ -26,6 +26,10 @@ public class Game {
      * jugadores, inicializa la baraja y reparte las cartas.
      */
     public void start() {
+        this.players = iu.getPlayers(); //inicializamos jugadores
+        
+        deck.shuffle(); //Barajamos baraja
+        
         // Repartimos 7 cartas a cada jugador
         for (int i = 0; i < 7; i++) {
             for (Player player : players) {
@@ -84,6 +88,7 @@ public class Game {
             } else { //Si el jugador aun no ha ganado comprobamos que haya cartas en la mesa para el proximo turno
                 if (this.deck.getRemainingCards() == 0) {
                     deck.setNewDeck(table.deleteAllExceptLastCard());//Si no hay cartas en la mesa las extraemos de las boca arriba en table excepto la ultima
+                    deck.shuffle(); //barajamos cartas
                 }
 
                 //Mostramos el estado de la mesa tras cada jugada

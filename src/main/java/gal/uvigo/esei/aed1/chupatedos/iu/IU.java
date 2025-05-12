@@ -112,13 +112,6 @@ public class IU {
             }
         }
 
-        //Si solo existe una carta en la lista, se forzara la seleccion
-        if (validCards.size() == 1) {
-            sb.append("\n").append("Como solo existe ").append(validCards.get(0).toString()).append(" se utilizara esa.");
-            this.displayMessage(sb.toString());
-            return validCards.get(0);
-        }
-
         sb.append("\n").append("Introduce la carta a utilizar: ");
 
         

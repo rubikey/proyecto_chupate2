@@ -13,18 +13,16 @@ public class DeckOfCards {
         for (Card card : Card.values()) {
             deck.push(card);
         }
-        this.shuffle();
     }
 
     // Método para barajar privado ya que siempre barajamos desde la propia clase
-    private void shuffle() {
+    public void shuffle() {
         Collections.shuffle(deck);
     }
     
     //Cuando se acaben las cartas del deck este metodo servira para establecer las nuevas cartas del deck
     public void setNewDeck(Stack<Card> deck){ 
         this.deck = deck;
-        this.shuffle();
     }
 
     // Coger la siguiente carta (top) de la baraja usando pop. Elimina la carta de
