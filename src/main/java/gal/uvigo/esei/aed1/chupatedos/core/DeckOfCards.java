@@ -24,7 +24,6 @@ public class DeckOfCards {
     //Cuando se acaben las cartas del deck este metodo servira para establecer las nuevas cartas del deck
     public void setNewDeck(Stack<Card> deck){ 
         this.deck = deck;
-        this.shuffle();
     }
 
     // Coger la siguiente carta (top) de la baraja usando pop. Elimina la carta de

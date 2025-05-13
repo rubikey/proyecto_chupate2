@@ -32,9 +32,6 @@ public class Game {
         }
     }
 
-    
-    
-    
     /**
      * Método para iniciar el juego. Solicita el número de jugadores, crea los
      * jugadores, inicializa la baraja y reparte las cartas.
@@ -71,12 +68,10 @@ public class Game {
             sentidoHorario = true; // cambia a sentido horario
             turno = avanzarTurno(0);
         }
-        
-        
+
         // Mostramos el estado de la mesa
         this.tableState();
 
-         
         boolean partidaFinalizada = false;
 
         while (!partidaFinalizada) {
@@ -118,6 +113,9 @@ public class Game {
                     int siguienteTurno = avanzarTurno(turno);
                     iu.displayMessage("El siguiente jugador " + players[siguienteTurno].getName() + " debe robar 2 cartas y pierde turno");
                     for (int i = 0; i < 2; i++) {
+                        if (i != 0 && this.deck.getRemainingCards() == 0) { //Comprobamos de manera prematura antes de robar la segunda (i no sea 0) carta si no se han acabado en la baraja
+                            this.recycleCards();
+                        }
                         players[siguienteTurno].addCard(deck.deal());
                     }
                     turno = avanzarTurno(siguienteTurno); // Saltamos turno
@@ -136,9 +134,7 @@ public class Game {
                 partidaFinalizada = true;
             } else { // Si el jugador aun no ha ganado comprobamos que haya cartas en el mazo para robar
                 if (this.deck.getRemainingCards() == 0) {
-                    Stack<Card> recycledCards = table.deleteAllExceptLastCard(); // Si no hay cartas se llama al método para quitar las que hay en la mesa y volver a barajarlas, dejando la que está en la cima (top)
-                    Collections.shuffle(recycledCards);
-                    deck.setNewDeck(recycledCards); // Carga la baraja actual con las cartas recicladas
+                    this.recycleCards();
                 }
 
                 //Mostramos el estado de la mesa tras cada jugada
@@ -148,6 +144,13 @@ public class Game {
             //Metodo con modulador para hacer un ciclo en contra de las agujas del reloj
             turno = avanzarTurno(turno);
         }
+    }
+
+    private void recycleCards() {
+        Stack<Card> recycledCards = table.deleteAllExceptLastCard(); // Si no hay cartas se llama al método para quitar las que hay en la mesa y volver a barajarlas, dejando la que está en la cima (top)
+        Collections.shuffle(recycledCards);
+        deck.setNewDeck(recycledCards); // Carga la baraja actual con las cartas recicladas
+        deck.shuffle(); // Barajamos
     }
 
     private void tableState() {
